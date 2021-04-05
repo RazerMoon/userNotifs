@@ -35,7 +35,7 @@ module.exports = class UserNotifs extends Plugin {
       if (!hasNotifyButton) {
         const addUserButton = React.createElement(Menu.MenuItem, {
           id: 'notify',
-          label: 'Notify on message',
+          label: 'Notify on Message',
           action: () => addUser(user, this.settings)
         });
 
