@@ -63,21 +63,17 @@ module.exports = class UserNotifs extends Plugin {
     const idlist = powercord.pluginManager.plugins.get('userNotifs').settings.get('idlist', []);
     if (idlist.includes(message.author.id)) {
       const user = powercord.pluginManager.plugins.get('userNotifs').settings.get('details', []).find(item => item.id === message.author.id);
-      const mod = await getModule([ 'showNotification' ]);
+
+      const modules = await Promise.all([ getModule([ 'showNotification' ]), getModule([ 'getUserAvatarURL', 'getGuildIconURL' ]), getModule([ 'transitionTo' ]) ]);
 
       if (!user) {
         console.log('[userNotifs] Something went wrong when fetching the user!');
         return null;
       }
-
-      const img = await getModule([ 'getUserAvatarURL', 'getGuildIconURL' ]);
-
       // ! Doesn't work with animated avatars
-      mod.showNotification(img.getUserAvatarURL(message.author, 'png'), `${message.author.username}#${message.author.discriminator}`, message.content, { onClick: async () => {
-        const trans = await getModule([ 'transitionTo' ]);
-
+      modules[0].showNotification(modules[1].getUserAvatarURL(message.author, 'png'), `${message.author.username}#${message.author.discriminator}`, message.content, { onClick: () => {
         // Yoinked from https://gist.github.com/jiangzhuo/793f6d120607bb71f30c45f4fa6ea00a
-        trans.transitionTo(`/channels/${message.guild_id ? message.guild_id : '@me'}/${message.channel_id}/${message.id}`);
+        modules[2].transitionTo(`/channels/${message.guild_id ? message.guild_id : '@me'}/${message.channel_id}/${message.id}`);
       } });
     }
   }
