@@ -49,7 +49,7 @@ module.exports = class UserNotifs extends Plugin {
 
           developerGroup.props.children.splice(developerGroup.props.children.length - 1, 0, addUserButton);
         } else {
-          res.props.children.props.children.splice(res.props.children.props.children - 1, 0, [ React.createElement(Menu.MenuSeparator), React.createElement(Menu.MenuGroup, {}, addUserButton) ]);
+          res.props.children.props.children.splice(res.props.children.props.children.length - 1, 0, [ React.createElement(Menu.MenuSeparator), React.createElement(Menu.MenuGroup, {}, addUserButton) ]);
         }
       }
 
