@@ -72,9 +72,6 @@ module.exports = class UserNotifs extends Plugin {
 
       const img = await getModule([ 'getUserAvatarURL', 'getGuildIconURL' ]);
 
-      console.log(message.author);
-      console.log(user);
-
       // ! Doesn't work with animated avatars
       mod.showNotification(img.getUserAvatarURL(message.author, 'png'), `${message.author.username}#${message.author.discriminator}`, message.content, { onClick: async () => {
         const trans = await getModule([ 'transitionTo' ]);
