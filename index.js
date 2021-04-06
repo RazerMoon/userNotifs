@@ -5,6 +5,7 @@ const { findInReactTree } = require('powercord/util');
 
 const Settings = require('./ui/Settings.jsx');
 const addUser = require('./utils/addUser');
+const removeUser = require('./utils/removeUser');
 
 /**
  * Creates a notification when a specified user sends a message
@@ -37,10 +38,12 @@ module.exports = class UserNotifs extends Plugin {
       const hasNotifyButton = findInReactTree(res.children, child => child.props && child.props.id === 'notify');
 
       if (!hasNotifyButton) {
+        const userOnList = this.settings.get('idlist', []).includes(user.id);
+
         const addUserButton = React.createElement(Menu.MenuItem, {
           id: 'notify',
-          label: 'Notify on Message',
-          action: () => addUser(user, this.settings)
+          label: userOnList ? 'Stop Message Notifs' : 'Notify on Message',
+          action: () => userOnList ? removeUser(user.id, this.settings) : addUser(user, this.settings)
         });
 
         const devmodeItem = findInReactTree(res.props, child => child.props && child.props.id === 'devmode-copy-id');
