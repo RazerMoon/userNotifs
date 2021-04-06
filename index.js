@@ -30,6 +30,10 @@ module.exports = class UserNotifs extends Plugin {
     const mod = await getModule((m) => (m.__powercordOriginal_default || m.default)?.displayName === 'GuildChannelUserContextMenu');
 
     inject('usernotifs-usercm-patch', mod, 'default', ([ { user } ], res) => {
+      if (!res) {
+        return res;
+      }
+
       const hasNotifyButton = findInReactTree(res.children, child => child.props && child.props.id === 'notify');
 
       if (!hasNotifyButton) {
