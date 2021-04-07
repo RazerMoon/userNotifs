@@ -1,12 +1,12 @@
 const { React } = require('powercord/webpack');
-const { ButtonItem, Category } = require('powercord/components/settings');
+const { ButtonItem, Category, SwitchItem } = require('powercord/components/settings');
 const removeUser = require('../utils/removeUser');
 
 // eslint-disable-next-line no-warning-comments
 // TODO: Make the channel items more distinct/seperate from the actual settings
 // eslint-disable-next-line no-warning-comments
 // TODO: Add avatar preview
-module.exports = ({ getSetting, updateSetting, settings }) => {
+module.exports = ({ getSetting, updateSetting, settings, toggleSetting }) => {
   const removeAll = () => {
     updateSetting('idlist', []);
     updateSetting('details', []);
@@ -30,6 +30,13 @@ module.exports = ({ getSetting, updateSetting, settings }) => {
       >
         Reset
       </ButtonItem>
+      <SwitchItem
+        note={'Whether you want to be notified if you receive a DM from a user you\'re listening for'}
+        value={getSetting('dm', false)}
+        onChange={() => toggleSetting('dm')}
+      >
+        Notify on DM
+      </SwitchItem>
       <Category name="Users" description="Users whose messages you are listening for" opened={opened} onChange={onChange} >
         {getSetting('details', []).map(({ id, username, discriminator }) => (
           <ButtonItem

@@ -78,8 +78,9 @@ module.exports = class UserNotifs extends Plugin {
         return null;
       }
 
-      const getChannel = (id) => {
-        const channel = modules[3].getChannel(id);
+      const channel = modules[3].getChannel(message.channel_id);
+
+      const getChannel = () => {
         if (channel.isDM()) {
           return 'DM';
         }
@@ -88,8 +89,12 @@ module.exports = class UserNotifs extends Plugin {
 
       const getUsername = ({ username, discriminator }) => `${username}#${discriminator}`;
 
+      if (!powercord.pluginManager.plugins.get('userNotifs').settings.get('dm', false) && channel.isDM()) {
+        return null;
+      }
+
       // ! Doesn't work with animated avatars
-      modules[0].showNotification(modules[1].getUserAvatarURL(message.author, 'png'), `${getUsername(message.author)} (${getChannel(message.channel_id)})`, message.content, { onClick: () => {
+      modules[0].showNotification(modules[1].getUserAvatarURL(message.author, 'png'), `${getUsername(message.author)} (${getChannel()})`, message.content, { onClick: () => {
         // Yoinked from https://gist.github.com/jiangzhuo/793f6d120607bb71f30c45f4fa6ea00a
         modules[2].transitionTo(`/channels/${message.guild_id ? message.guild_id : '@me'}/${message.channel_id}/${message.id}`);
       } });
