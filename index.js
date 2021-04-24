@@ -64,12 +64,10 @@ module.exports = class UserNotifs extends Plugin {
     });
   }
 
-  async handleMessage ({ message }) {
-    // ? this.settings causes discord to freak out here
-    // ! Small errors here cause discord to crash loop
-    const idlist = powercord.pluginManager.plugins.get('userNotifs').settings.get('idlist', []);
+  async handleMessage = ({ message }) => {
+    const idlist = this.settings.get('idlist', []);
     if (idlist.includes(message.author.id)) {
-      const user = powercord.pluginManager.plugins.get('userNotifs').settings.get('details', []).find(item => item.id === message.author.id);
+      const user = this.settings.get('details', []).find(item => item.id === message.author.id);
 
       const modules = await Promise.all([ getModule([ 'showNotification' ]), getModule([ 'getUserAvatarURL', 'getGuildIconURL' ]), getModule([ 'transitionTo' ]), getModule([ 'getChannel' ]), getModule([ 'getGuild' ]) ]);
 
@@ -89,7 +87,7 @@ module.exports = class UserNotifs extends Plugin {
 
       const getUsername = ({ username, discriminator }) => `${username}#${discriminator}`;
 
-      if (!powercord.pluginManager.plugins.get('userNotifs').settings.get('dm', false) && channel.isDM()) {
+      if (!this.settings.get('dm', false) && channel.isDM()) {
         return null;
       }
 
