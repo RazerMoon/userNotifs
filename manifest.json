@@ -1,6 +1,6 @@
 {
   "name": "User Notifs",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Shows a notification when a specified user sends a message",
   "author": "RazerMoon",
   "license": "MIT"

@@ -70,7 +70,7 @@ module.exports = class UserNotifs extends Plugin {
     if (idlist.includes(message.author.id)) {
       const user = this.settings.get('details', []).find(item => item.id === message.author.id);
 
-      const modules = await Promise.all([ getModule([ 'showNotification' ]), getModule([ 'getUserAvatarURL', 'getGuildIconURL' ]), getModule([ 'transitionTo' ]), getModule([ 'getChannel' ]), getModule([ 'getGuild' ]) ]);
+      const modules = await Promise.all([ getModule([ 'showNotification' ]), getModule([ 'getUserAvatarURL', 'getGuildIconURL' ]), getModule([ 'transitionTo' ]), getModule([ 'getChannel', 'getDMFromUserId' ]), getModule([ 'getGuild' ]) ]);
 
       if (!user) {
         console.log('[userNotifs] Something went wrong when fetching the user!');
