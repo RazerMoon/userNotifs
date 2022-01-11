@@ -23,7 +23,17 @@ module.exports = class UserNotifs extends Plugin {
 
     FluxDispatcher.subscribe('MESSAGE_CREATE', this.handleMessage.bind(this));
 
-    this.patchUserCM();
+    document.addEventListener('mousedown', this.patchListener.bind(this), { once: true });
+  }
+
+  patchListener (e) {
+    console.dir(e);
+    if (e.button === 2 && e.target?.tagName === 'IMG' && e.target.className.includes('avatar')) {
+      setTimeout(() => {
+        this.patchUserCM();
+        console.log('Patched');
+      }, 500);
+    }
   }
 
   async patchUserCM () {
