@@ -23,7 +23,9 @@ module.exports = class UserNotifs extends Plugin {
 
     FluxDispatcher.subscribe('MESSAGE_CREATE', this.handleMessage.bind(this));
 
-    document.addEventListener('mousedown', this.patchListener.bind(this), { once: true });
+    this.patchListener = this.patchListener.bind(this);
+
+    document.addEventListener('mousedown', this.patchListener);
   }
 
   patchListener (e) {
@@ -32,6 +34,7 @@ module.exports = class UserNotifs extends Plugin {
       setTimeout(() => {
         this.patchUserCM();
         console.log('Patched');
+        document.removeEventListener('mousedown', this.patchListener);
       }, 500);
     }
   }
