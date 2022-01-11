@@ -29,11 +29,9 @@ module.exports = class UserNotifs extends Plugin {
   }
 
   patchListener (e) {
-    console.dir(e);
     if (e.button === 2 && e.target?.tagName === 'IMG' && e.target.className.includes('avatar')) {
       setTimeout(() => {
         this.patchUserCM();
-        console.log('Patched');
         document.removeEventListener('mousedown', this.patchListener);
       }, 500);
     }
