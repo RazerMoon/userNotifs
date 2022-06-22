@@ -1,5 +1,7 @@
 const { React } = require('powercord/webpack');
-const { ButtonItem, Category, SwitchItem } = require('powercord/components/settings');
+const { Button } = require('powercord/components');
+const { TextInput, ButtonItem, Category, SwitchItem } = require('powercord/components/settings');
+const addUser = require('../utils/addUser');
 const removeUser = require('../utils/removeUser');
 
 // eslint-disable-next-line no-warning-comments
@@ -11,6 +13,9 @@ module.exports = ({ getSetting, updateSetting, settings, toggleSetting }) => {
     updateSetting('idlist', []);
     updateSetting('details', []);
   };
+
+  const [ userField, setUserField ] = React.useState('');
+  const [ idField, setIdField ] = React.useState('');
 
   const [ opened, onChange ] = React.useState(true);
 
@@ -38,6 +43,33 @@ module.exports = ({ getSetting, updateSetting, settings, toggleSetting }) => {
         Notify on DM
       </SwitchItem>
       <Category name="Users" description="Users whose messages you are listening for" opened={opened} onChange={onChange} >
+        <div style={{ display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center' }}>
+          <TextInput
+            note="Whatever you like"
+            onChange={setUserField}
+          >
+        Username
+          </TextInput>
+          <TextInput
+            note="The user's Discord ID"
+            onChange={setIdField}
+          >
+        ID
+          </TextInput>
+          <Button
+            size={Button.Sizes.MEDIUM}
+            color={Button.Colors.GREEN}
+            onClick={() => {
+              console.log('Adding user');
+              addUser({ username: `${userField} (Manual)`,
+                id: idField }, { get: getSetting,
+                set: updateSetting });
+            }}
+          >Add</Button>
+        </div>
         {getSetting('details', []).map(({ id, username, discriminator }) => (
           <ButtonItem
             note={`ID: ${id}`}
@@ -45,7 +77,7 @@ module.exports = ({ getSetting, updateSetting, settings, toggleSetting }) => {
             onClick={() => removeUser(id, { get: getSetting,
               set: updateSetting })}
           >
-            {username}#{discriminator}
+            {username}{discriminator ? `#${discriminator}` : ''}
           </ButtonItem>
         ))}
       </Category>
